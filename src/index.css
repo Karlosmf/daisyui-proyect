@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+body {
+    @apply bg-slate-400;
+    @apply h-screen;
+}
+
