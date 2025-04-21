@@ -1,32 +1,29 @@
 import React, { useState } from "react";
+import { AuthProvider, useAuth } from "./AuthContext.jsx";
 import Login from "./assets/components/Login.jsx";
 import MainApp from "./MainApp";
 import "./App.css";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Estado para saber si el usuario está logueado
+  // Aquí envolvemos la lógica principal con el AuthProvider
+  return (
+    <AuthProvider>
+      <AppContent /> {/* Un componente que decide qué mostrar */}
+    </AuthProvider>
+  );
+}
 
-  // Esta función se la pasaremos al componente Login
-  const handleLoginSuccess = () => {
-    setIsLoggedIn(true); // Cambia el estado a true cuando el login es exitoso
-    // En una aplicación real, aquí podrías guardar un token en localStorage
-    // y redirigir usando React Router DOM (ver notas al final)
-  };
-
-  // Podrías añadir una función para cerrar sesión si quieres
-  // const handleLogout = () => {
-  //   setIsLoggedIn(false);
-  //   // Limpiar token de localStorage si lo usaste
-  // };
+// Este componente usa el hook useAuth para decidir qué renderizar
+function AppContent() {
+  const { user } = useAuth(); // <-- Aquí consumes el contexto para saber si hay usuario logueado
 
   return (
     <div className="App">
-      {isLoggedIn ? (
-        // Si isLoggedIn es true, muestra la App Principal
+      {user ? ( // Si 'user' existe (no es null), muestra la App Principal
         <MainApp />
       ) : (
-        // Si no, muestra el formulario de Login y le pasa la función para avisar del éxito
-        <Login onLoginSuccess={handleLoginSuccess} />
+        // Si no, muestra el Login
+        <Login /> /* Login ya no necesita onLoginSuccess prop, usa useAuth */
       )}
     </div>
   );

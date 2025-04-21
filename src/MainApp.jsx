@@ -1,7 +1,16 @@
 import React from "react";
+import { useAuth } from "./AuthContext.jsx";
 import Navbar from "./assets/components/Navbar.jsx";
 
 const MainApp = () => {
+  const { user } = useAuth();
+
+  if (!user) {
+    // Esto no debería pasar si el renderizado condicional en App.js funciona bien,
+    // pero es buena práctica manejar el caso por si acaso.
+    return null; // O redirigir al login
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
